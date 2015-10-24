@@ -1,37 +1,55 @@
 package com.jchess.network;
 
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 import java.util.logging.Logger;
 
-public class GamePacket implements ReceivablePacket, SendablePacket {
+public abstract class GamePacket implements ReceivablePacket, SendablePacket {
     private static final Logger LOG = Logger.getLogger(GamePacket.class.getName());
-    private static byte NULL = 0;
+    private static byte NULL = 0x00;
 
     public final OpCode opcode;
 
     private byte[] bytes;
     private int seek = 0;
 
+    /**
+     * Construct a new game packet with the provided opcode.
+     * @param opcode opcode for created packet
+     */
     public GamePacket(OpCode opcode) {
-        bytes = new byte[0];
+        this.bytes = new byte[2];
         this.opcode = opcode;
-        add((short) opcode.opcode);
+
+        addOpcode(opcode);
     }
 
-    private GamePacket(boolean fromBytes, byte[] bytes) {
+    /**
+     * Construct a new game packet from a byte array.
+     * @param bytes packet bytes
+     */
+    public GamePacket(byte[] bytes) {
         this.bytes = bytes;
         this.opcode = readOpcode();
     }
 
+    /**
+     * SendablePacket overrides
+     */
     @Override
     public byte[] getBytes() {
         return bytes;
     }
 
     @Override
-    public final OpCode readOpcode() {
-        return OpCode.get(readShort());
+    public void encrypt() {
+        // TODO: encrypt packet?
+    }
+
+    @Override
+    public void addOpcode(OpCode opcode) {
+        // Opcode should only be added in constructor so we assume that the size is at least 2
+        seek = 0;
+        add((short) opcode.opcode);
     }
 
     @Override
@@ -79,10 +97,23 @@ public class GamePacket implements ReceivablePacket, SendablePacket {
         bytes = ByteBuffer.allocate(bytes.length + value.length() + 1).put(bytes).put(value.getBytes()).put(NULL).array();
     }
 
+    /**
+     * ReceivablePacket overrides
+     */
+    @Override
+    public void decrypt() {
+        // TODO: decrypt packet?
+    }
+
+    @Override
+    public final OpCode readOpcode() {
+        return OpCode.get(readShort());
+    }
+
     @Override
     public final short readShort() {
         seek += 2;
-        return ByteBuffer.wrap(bytes, seek-2, 2).getShort();
+        return ByteBuffer.wrap(bytes, seek - 2, 2).getShort();
     }
 
     @Override
@@ -126,14 +157,5 @@ public class GamePacket implements ReceivablePacket, SendablePacket {
         }
 
         return sb.toString();
-    }
-
-    @Override
-    public String toString() {
-        return "BasePacket{" + "opcode=" + opcode + ", bytes=" + Arrays.toString(bytes) + '}';
-    }
-
-    public static GamePacket fromBytes(byte[] bytes) {
-        return new GamePacket(true, bytes);
     }
 }

@@ -1,7 +1,7 @@
 package com.jchess.network;
 
 public enum OpCode {
-    PING(0x0000);
+    AUTH_REQUEST(0x0000);
 
     public final int opcode;
 
@@ -9,9 +9,17 @@ public enum OpCode {
         this.opcode = opcode;
     }
 
-    public static OpCode get(int id) {
+    /**
+     * Get enum constant from opcode.
+     *
+     * TODO: Improve code so we don't have to loop through all each time.
+     *
+     * @param opcode opcode
+     * @return OpCode enum constant
+     */
+    public static OpCode get(int opcode) {
         for (OpCode oc : OpCode.values())
-            if (oc.opcode == id)
+            if (oc.opcode == opcode)
                 return oc;
         return null;
     }
