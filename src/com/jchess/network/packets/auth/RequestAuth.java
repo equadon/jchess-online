@@ -10,14 +10,17 @@ public class RequestAuth extends GamePacket {
     public RequestAuth(String username, String password) {
         super(OpCode.AUTH_INIT);
 
+        add(username);
+        add(password);
+
         this.username = username;
         this.password = password;
     }
 
-    public RequestAuth(byte[] bytes) {
-        super(bytes);
+    public RequestAuth(OpCode opcode, int length, byte[] payload) {
+        super(opcode, length, payload);
 
-        this.username = readString();
-        this.password = readString();
+        username = readString();
+        password = readString();
     }
 }

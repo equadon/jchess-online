@@ -14,7 +14,7 @@ public class AsymmetricCrypto {
 
     private KeyPair keyPair;
 
-    private AsymmetricCrypto() {
+    public AsymmetricCrypto() {
         Security.addProvider(new BouncyCastleProvider());
     }
 

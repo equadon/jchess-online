@@ -1,9 +1,9 @@
 package com.jchess.network;
 
 public interface SendablePacket {
+    OpCode getOpcode();
     byte[] getBytes();
 
-    void addOpcode(OpCode opcode);
     void add(byte value);
     void add(byte[] values);
     void add(short value);

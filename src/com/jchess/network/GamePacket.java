@@ -1,37 +1,48 @@
 package com.jchess.network;
 
-import com.jchess.Config;
+import com.jchess.network.packets.auth.RequestAuth;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.logging.Logger;
 
-public abstract class GamePacket implements ReceivablePacket, SendablePacket {
+public class GamePacket implements ReceivablePacket, SendablePacket {
     private static final Logger LOG = Logger.getLogger(GamePacket.class.getName());
     private static byte NULL = 0x00;
 
-    public final OpCode opcode;
+    private OpCode opcode;
 
+    private int seek;
+    private int length;
     private byte[] bytes;
-    private int seek = 0;
 
     /**
      * Construct a new game packet with the provided opcode.
      * @param opcode opcode for created packet
      */
     public GamePacket(OpCode opcode) {
-        this.bytes = new byte[2];
+        this.bytes = new byte[4];
         this.opcode = opcode;
+        this.seek = 0;
 
-        addOpcode(opcode);
+        putOpcode(opcode);
     }
 
     /**
      * Construct a new game packet from a byte array.
-     * @param bytes packet bytes
      */
-    public GamePacket(byte[] bytes) {
-        this.bytes = bytes;
-        this.opcode = readOpcode();
+    public GamePacket(OpCode opcode, int length, byte[] payload) {
+        this.opcode = opcode;
+        this.length = length;
+        this.bytes = new byte[length + 4];
+        this.seek = 4;
+        System.arraycopy(payload, 0, this.bytes, 4, length);
+        ByteBuffer.wrap(this.bytes).putShort(0, (short) opcode.opcode);
+        updateLength();
+    }
+
+    public OpCode getOpcode() {
+        return opcode;
     }
 
     /**
@@ -39,14 +50,21 @@ public abstract class GamePacket implements ReceivablePacket, SendablePacket {
      */
     @Override
     public byte[] getBytes() {
+        updateLength();
         return bytes;
     }
 
-    @Override
-    public void addOpcode(OpCode opcode) {
-        // Opcode should only be added in constructor so we assume that the size is at least 2
-        seek = 0;
-        add((short) opcode.opcode);
+    private void updateLength() {
+        this.length = bytes.length - 4;
+        putLength(this.length);
+    }
+
+    private void putOpcode(OpCode opcode) {
+        ByteBuffer.wrap(bytes).putShort(0, (short) opcode.opcode);
+    }
+
+    private void putLength(int length) {
+        ByteBuffer.wrap(bytes).putShort(2, (short) length);
     }
 
     @Override
@@ -142,8 +160,10 @@ public abstract class GamePacket implements ReceivablePacket, SendablePacket {
         StringBuilder sb = new StringBuilder();
 
         for (; seek < bytes.length; seek++) {
-            if (bytes[seek] == NULL)
+            if (bytes[seek] == NULL) {
+                seek++;
                 break;
+            }
 
             sb.append((char) bytes[seek]);
         }

@@ -26,7 +26,7 @@ public class SymmetricCrypto {
     private byte[] key;
     private byte[] nounce;
 
-    private SymmetricCrypto() {
+    public SymmetricCrypto() {
         engine = new AESEngine();
         encryptCipher = new GCMBlockCipher(engine);
         decryptCipher = new GCMBlockCipher(engine);
