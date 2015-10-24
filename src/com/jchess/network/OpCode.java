@@ -1,7 +1,13 @@
 package com.jchess.network;
 
 public enum OpCode {
-    AUTH_REQUEST(0x0000);
+    // Initial handshake
+    HANDSHAKE_INIT(0x0000),
+    HANDSHAKE(0x0001),
+
+    // Authentication
+    AUTH_INIT(0x1000),
+    AUTH(0x1001);
 
     public final int opcode;
 

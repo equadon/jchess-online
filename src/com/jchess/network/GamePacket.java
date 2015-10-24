@@ -1,5 +1,7 @@
 package com.jchess.network;
 
+import com.jchess.Config;
+
 import java.nio.ByteBuffer;
 import java.util.logging.Logger;
 
@@ -38,11 +40,6 @@ public abstract class GamePacket implements ReceivablePacket, SendablePacket {
     @Override
     public byte[] getBytes() {
         return bytes;
-    }
-
-    @Override
-    public void encrypt() {
-        // TODO: encrypt packet?
     }
 
     @Override
@@ -100,11 +97,6 @@ public abstract class GamePacket implements ReceivablePacket, SendablePacket {
     /**
      * ReceivablePacket overrides
      */
-    @Override
-    public void decrypt() {
-        // TODO: decrypt packet?
-    }
-
     @Override
     public final OpCode readOpcode() {
         return OpCode.get(readShort());

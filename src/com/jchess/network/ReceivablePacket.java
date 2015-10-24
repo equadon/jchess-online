@@ -1,8 +1,6 @@
 package com.jchess.network;
 
 public interface ReceivablePacket {
-    void decrypt();
-
     OpCode readOpcode();
     short readShort();
     int readInt();
