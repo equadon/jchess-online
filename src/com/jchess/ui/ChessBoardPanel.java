@@ -8,7 +8,7 @@ import java.awt.*;
 public class ChessBoardPanel extends JPanel {
     public static final int BORDER = 30; // pixels
 
-    public static final Color TEXT_COLOR = new Color(50, 50, 50);
+    public static final Color TEXT_COLOR = new Color(60, 60, 60);
     public static final Color BG_COLOR = new Color(231, 175, 111);
     public static final Color SQUARE_COLOR = new Color(137, 89, 51);
 
@@ -62,10 +62,10 @@ public class ChessBoardPanel extends JPanel {
         g.drawRect(bounds.x, bounds.y, width * Board.COLUMNS, height * Board.ROWS);
 
         // Draw letters and numbers
-        drawCellIds(g);
+        drawCellNumbers(g);
     }
 
-    private void drawCellIds(Graphics2D g) {
+    private void drawCellNumbers(Graphics2D g) {
         Rectangle bounds = getBoardBounds();
 
         int width = getSquareWidth();
@@ -74,7 +74,7 @@ public class ChessBoardPanel extends JPanel {
         String[] letters = {"a", "b", "c", "d", "e", "f", "g", "h"};
         String[] numbers = {"8", "7", "6", "5", "4", "3", "2", "1"};
 
-        Font font = new Font("Inconsolata", Font.PLAIN, 22);
+        Font font = new Font(Font.SANS_SERIF, Font.PLAIN, 14);
 
         // Square letters and numbers
         g.setFont(font);
@@ -83,27 +83,21 @@ public class ChessBoardPanel extends JPanel {
         FontMetrics metrics = g.getFontMetrics(font);
 
         // Letters (rows)
-        for (int row = 0; row <= Board.ROWS; row += Board.ROWS) {
-            for (int col = 0; col < Board.COLUMNS; col++) {
-                int strWidth = metrics.stringWidth(letters[col]);
-                int x = bounds.x + col * width + (int) (width / 2.0) - (int) (strWidth / 2.0);
-                int yOffset = metrics.getHeight();
-                if (row > 0)
-                    yOffset += metrics.getHeight() + 3;
+        for (int col = 0; col < Board.COLUMNS; col++) {
+            int strWidth = metrics.stringWidth(letters[col]);
+            int x = bounds.x + col * width + (int) (width / 2.0) - (int) (strWidth / 2.0);
 
-                g.drawString(letters[col], x, row * height + yOffset);
-            }
+            g.drawString(letters[col], x, bounds.y - (int) (metrics.getHeight() / 2.0) + 5);
+            g.drawString(letters[col], x, (int) bounds.getMaxY() + (int) (metrics.getHeight() / 2.0));
         }
 
         // Numbers (columns)
         for (int row = 0; row < Board.ROWS; row++) {
-            for (int col = 0; col <= Board.COLUMNS; col += Board.COLUMNS) {
-                int strWidth = metrics.stringWidth(numbers[row]);
-                int y = bounds.y + row * height + (int) (getSquareHeight() / 2.0);
-                int xOffset = (col == 0) ? -(strWidth + 3) : 3;
+            int strWidth = metrics.stringWidth(numbers[row]);
+            int y = bounds.y + row * height + (int) (getSquareHeight() / 2.0) + (int) (metrics.getHeight() / 3.0);
 
-                g.drawString(numbers[row], BORDER + col * width + xOffset, y + (int) (metrics.getHeight() / 3.0));
-            }
+            g.drawString(numbers[row], bounds.x - strWidth - 3, y);
+            g.drawString(numbers[row], (int) bounds.getMaxX(), y);
         }
     }
 }
