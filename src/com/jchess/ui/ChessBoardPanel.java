@@ -1,6 +1,9 @@
 package com.jchess.ui;
 
 import com.jchess.board.Board;
+import com.jchess.pieces.Black;
+import com.jchess.pieces.PieceType;
+import com.jchess.pieces.White;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,7 +39,24 @@ public class ChessBoardPanel extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
+        // Draw board
         drawBoard(g2d);
+
+        // Draw letters and numbers
+        drawCellNumbers(g2d);
+    }
+
+    private void drawPiece(Graphics2D g, int row, int col, PieceType piece) {
+        Rectangle bounds = getBoardBounds();
+        Font font = new Font("Chess Cases", Font.PLAIN, 64);
+        g.setFont(font);
+
+        String letter = Character.toString(piece.getLetter());
+
+        int x = bounds.x + col * getSquareWidth();
+        int y = bounds.y + (row + 1) * getSquareHeight();
+
+        g.drawString(letter, x, y);
     }
 
     private void drawBoard(Graphics2D g) {
@@ -60,9 +80,6 @@ public class ChessBoardPanel extends JPanel {
 
         // Border
         g.drawRect(bounds.x, bounds.y, width * Board.COLUMNS, height * Board.ROWS);
-
-        // Draw letters and numbers
-        drawCellNumbers(g);
     }
 
     private void drawCellNumbers(Graphics2D g) {
