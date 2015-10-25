@@ -9,5 +9,6 @@ public class AuthHandler {
 
     public AuthHandler(AuthRequest packet) {
         LOG.info("Username: " + packet.username);
+        LOG.info("Password: " + packet.password);
     }
 }

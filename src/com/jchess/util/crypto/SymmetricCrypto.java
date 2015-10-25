@@ -1,5 +1,6 @@
 package com.jchess.util.crypto;
 
+import com.jchess.network.packets.auth.AuthRequest;
 import org.bouncycastle.crypto.BlockCipher;
 import org.bouncycastle.crypto.CryptoException;
 import org.bouncycastle.crypto.engines.AESEngine;
@@ -10,13 +11,18 @@ import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.util.encoders.Base64;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 import java.security.*;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
 public class SymmetricCrypto {
     private static final Logger LOG = Logger.getLogger(SymmetricCrypto.class.getName());
+
     private static final int MAC_SIZE = 128;
+    public static final int KEY_SIZE = 32;
+    public static final int NOUNCE_SIZE = 12;
+
     private static final SecureRandom RANDOM = new SecureRandom();
 
     private BlockCipher engine;
@@ -27,15 +33,31 @@ public class SymmetricCrypto {
     private byte[] nounce;
 
     public SymmetricCrypto() {
+        this.key = new byte[KEY_SIZE];
+        this.nounce = new byte[NOUNCE_SIZE];
+
+        RANDOM.nextBytes(this.key);
+        RANDOM.nextBytes(this.nounce);
+
         engine = new AESEngine();
         encryptCipher = new GCMBlockCipher(engine);
         decryptCipher = new GCMBlockCipher(engine);
 
-        key = new byte[32];
-        nounce = new byte[12];
+        encryptCipher.init(true, getParams());
+        decryptCipher.init(false, getParams());
+    }
 
-        RANDOM.nextBytes(key);
-        RANDOM.nextBytes(nounce);
+    public byte[] getKey() {
+        return key;
+    }
+
+    public byte[] getNounce() {
+        return nounce;
+    }
+
+    public void setKeyNounce(byte[] key, byte[] nounce) {
+        this.key = key;
+        this.nounce = nounce;
 
         encryptCipher.init(true, getParams());
         decryptCipher.init(false, getParams());
@@ -62,6 +84,8 @@ public class SymmetricCrypto {
 
         encryptCipher.doFinal(cipherText, outputLen + offset);
 
+        updateLength(cipherText);
+
         return cipherText;
     }
 
@@ -83,5 +107,14 @@ public class SymmetricCrypto {
         decryptCipher.doFinal(plainText, outputLen + offset);
 
         return plainText;
+    }
+
+    private void updateLength(byte[] bytes) {
+        ByteBuffer.wrap(bytes).putShort(2, (short) (bytes.length - 4));
+    }
+
+    public static void main(String[] args) {
+        AuthRequest p = new AuthRequest("user", "pass");
+        System.out.println("Original: " + Arrays.toString(p.getBytes()));
     }
 }

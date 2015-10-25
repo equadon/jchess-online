@@ -1,6 +1,7 @@
 package com.jchess.network;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 public abstract class GamePacket implements ReceivablePacket, SendablePacket {
     protected static byte NULL = 0x00;
@@ -73,11 +74,16 @@ public abstract class GamePacket implements ReceivablePacket, SendablePacket {
     }
 
     protected void add(byte value) {
-        ByteBuffer.allocate(bytes.length + 1).put(bytes).put(value);
+        bytes = Arrays.copyOf(bytes, bytes.length + 1);
+        bytes[bytes.length-1] = value;
     }
 
     protected void add(byte[] values) {
-        ByteBuffer.allocate(bytes.length + values.length).put(bytes);
+        int length = bytes.length;
+        bytes = Arrays.copyOf(bytes, length + values.length);
+
+        for (int i = 0; i < values.length; i++)
+            bytes[length + i] = values[i];
     }
 
     protected void add(short value) {
@@ -113,6 +119,12 @@ public abstract class GamePacket implements ReceivablePacket, SendablePacket {
      */
     protected OpCode readOpcode() {
         return OpCode.get(readShort());
+    }
+
+    protected byte[] readBytes(int length) {
+        byte[] range = Arrays.copyOfRange(bytes, seek, seek + length);
+        seek += length;
+        return range;
     }
 
     protected short readShort() {
