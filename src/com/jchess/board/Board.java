@@ -6,8 +6,17 @@ public class Board {
 
     private final Square[] squares;
 
+    // Iterate over Pieces
+
     public Board() {
         squares = new Square[ROWS * COLUMNS];
+
+        for (int i = 0; i < ROWS * COLUMNS; i++)
+            squares[i] = new Square(getRow(i), getColumn(i));
+    }
+
+    public Square[] getSquares() {
+        return squares;
     }
 
     public Square getSquare(int row, int col) {

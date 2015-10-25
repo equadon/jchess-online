@@ -1,5 +1,10 @@
 package com.jchess.pieces;
 
-public interface PieceType {
-    char getLetter();
+public enum PieceType {
+    PAWN,
+    KNIGHT,
+    BISHOP,
+    ROOK,
+    QUEEN,
+    KING
 }

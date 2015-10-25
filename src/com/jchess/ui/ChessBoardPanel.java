@@ -1,9 +1,8 @@
 package com.jchess.ui;
 
 import com.jchess.board.Board;
-import com.jchess.pieces.Black;
-import com.jchess.pieces.PieceType;
-import com.jchess.pieces.White;
+import com.jchess.pieces.Piece;
+import com.jchess.ui.drawers.PieceDrawer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +14,16 @@ public class ChessBoardPanel extends JPanel {
     public static final Color BG_COLOR = new Color(231, 175, 111);
     public static final Color SQUARE_COLOR = new Color(137, 89, 51);
 
-    public ChessBoardPanel() {
+    private static final Font chessFont = new Font("Chess Cases", Font.PLAIN, 64);
+    private static final Font squareFont = new Font(Font.SANS_SERIF, Font.PLAIN, 14);
+
+    private Board board;
+
+    private PieceDrawer pieceDrawer;
+
+    public ChessBoardPanel(Board board, PieceDrawer pieceDrawer) {
+        this.board = board;
+        this.pieceDrawer = pieceDrawer;
     }
 
     public Rectangle getBoardBounds() {
@@ -44,19 +52,15 @@ public class ChessBoardPanel extends JPanel {
 
         // Draw letters and numbers
         drawCellNumbers(g2d);
+
+        drawPieces(g2d);
     }
 
-    private void drawPiece(Graphics2D g, int row, int col, PieceType piece) {
-        Rectangle bounds = getBoardBounds();
-        Font font = new Font("Chess Cases", Font.PLAIN, 64);
-        g.setFont(font);
+    private void drawPieces(Graphics2D g) {
+    }
 
-        String letter = Character.toString(piece.getLetter());
-
-        int x = bounds.x + col * getSquareWidth();
-        int y = bounds.y + (row + 1) * getSquareHeight();
-
-        g.drawString(letter, x, y);
+    private void drawPiece(Graphics2D g, Piece piece) {
+        pieceDrawer.draw(g, piece);
     }
 
     private void drawBoard(Graphics2D g) {
@@ -73,9 +77,8 @@ public class ChessBoardPanel extends JPanel {
         for (int row = 0; row < Board.ROWS; row++) {
             int col = (row % 2 == 0) ? 1 : 0;
 
-            for (; col < Board.COLUMNS; col += 2) {
+            for (; col < Board.COLUMNS; col += 2)
                 g.fillRect(bounds.x + (col * width), bounds.y + (row * height), width, height);
-            }
         }
 
         // Border
@@ -91,13 +94,11 @@ public class ChessBoardPanel extends JPanel {
         String[] letters = {"a", "b", "c", "d", "e", "f", "g", "h"};
         String[] numbers = {"8", "7", "6", "5", "4", "3", "2", "1"};
 
-        Font font = new Font(Font.SANS_SERIF, Font.PLAIN, 14);
-
         // Square letters and numbers
-        g.setFont(font);
+        g.setFont(squareFont);
         g.setColor(TEXT_COLOR);
 
-        FontMetrics metrics = g.getFontMetrics(font);
+        FontMetrics metrics = g.getFontMetrics(squareFont);
 
         // Letters (rows)
         for (int col = 0; col < Board.COLUMNS; col++) {

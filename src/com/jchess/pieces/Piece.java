@@ -1,15 +1,24 @@
 package com.jchess.pieces;
 
+import com.jchess.game.Color;
 import com.jchess.game.Move;
 
 public abstract class Piece {
     private PieceType type;
-    //public abstract Move[] validMoves();
+    private Color color;
 
-    public Piece() {
-        this(null);
+    public Piece(PieceType type, Color color) {
+        this.type = type;
+        this.color = color;
     }
 
-    public Piece(PieceType type) {
+    public PieceType getType() {
+        return type;
     }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public abstract Move[] validMoves();
 }
