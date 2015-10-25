@@ -1,6 +1,6 @@
 package com.jchess.ui.drawers;
 
-import com.jchess.pieces.Piece;
+import com.jchess.game.Piece;
 
 import java.awt.*;
 

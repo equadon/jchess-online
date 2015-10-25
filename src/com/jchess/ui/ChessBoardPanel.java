@@ -1,7 +1,7 @@
 package com.jchess.ui;
 
 import com.jchess.board.Board;
-import com.jchess.pieces.Piece;
+import com.jchess.game.Piece;
 import com.jchess.ui.drawers.PieceDrawer;
 
 import javax.swing.*;
