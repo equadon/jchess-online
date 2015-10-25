@@ -1,5 +1,6 @@
 package com.jchess.server;
 
+import com.jchess.Config;
 import com.jchess.exceptions.JCUnknownPacketException;
 import com.jchess.network.ClientListener;
 import com.jchess.network.PacketManager;
@@ -42,12 +43,19 @@ public class ServerClient extends ClientListener implements Runnable {
     }
 
     public void updatePublicKey(PublicKey publicKey) {
-        this.publicKey = publicKey;
+        byte[] key;
+        byte[] nounce;
 
-        Handshake handshake = new Handshake(Handshake.HandshakeStatus.OK, crypto.getKey(), crypto.getNounce());
+        if (Config.ENCRYPTPED_PACKETS) {
+            key = crypto.getKey();
+            nounce = crypto.getNounce();
+            this.publicKey = publicKey;
+        } else {
+            key = new byte[1];
+            nounce = new byte[1];
+        }
+
+        Handshake handshake = new Handshake(Handshake.HandshakeStatus.OK, key, nounce);
         send(handshake);
-
-        LOG.info("Key: " + Arrays.toString(crypto.getKey()));
-        LOG.info("Nounce: " + Arrays.toString(crypto.getNounce()));
     }
 }

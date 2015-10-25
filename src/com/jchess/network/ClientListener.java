@@ -6,8 +6,13 @@ import com.jchess.util.crypto.AsymmetricCrypto;
 import com.jchess.util.crypto.SymmetricCrypto;
 import org.bouncycastle.crypto.CryptoException;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import java.io.*;
 import java.net.Socket;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.util.Arrays;
 import java.util.logging.Logger;
@@ -68,8 +73,16 @@ public class ClientListener {
             LOG.warning(ioe.getMessage());
         } catch (CryptoException ce) {
             LOG.severe(ce.getMessage());
-        } catch (Exception e) {
-            LOG.severe(e.getMessage());
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
         }
     }
 
@@ -106,8 +119,16 @@ public class ClientListener {
             handler.manage(opcode, length, decrypted);
         } catch (CryptoException ce) {
             LOG.severe(ce.getMessage());
-        } catch (Exception e) {
-            LOG.severe(e.getMessage());
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
         }
     }
 }

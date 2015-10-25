@@ -1,5 +1,6 @@
 package com.jchess.network.packets.auth;
 
+import com.jchess.Config;
 import com.jchess.network.GamePacket;
 import com.jchess.network.OpCode;
 import com.jchess.network.ReceivablePacket;
@@ -18,8 +19,11 @@ public class Handshake extends GamePacket {
         super(OpCode.HANDSHAKE);
 
         add((short) status.ordinal());
-        add(key);
-        add(nounce);
+
+        if (Config.ENCRYPTPED_PACKETS) {
+            add(key);
+            add(nounce);
+        }
 
         this.status = status;
         this.key = key;
@@ -31,7 +35,7 @@ public class Handshake extends GamePacket {
 
         this.status = HandshakeStatus.values()[readShort()];
 
-        if (this.status == HandshakeStatus.OK) {
+        if (Config.ENCRYPTPED_PACKETS && this.status == HandshakeStatus.OK) {
             this.key = readBytes(SymmetricCrypto.KEY_SIZE);
             this.nounce = readBytes(SymmetricCrypto.NOUNCE_SIZE);
         } else {
@@ -45,7 +49,7 @@ public class Handshake extends GamePacket {
 
         this.status = HandshakeStatus.values()[readShort()];
 
-        if (this.status == HandshakeStatus.OK) {
+        if (Config.ENCRYPTPED_PACKETS && this.status == HandshakeStatus.OK) {
             this.key = readBytes(SymmetricCrypto.KEY_SIZE);
             this.nounce = readBytes(SymmetricCrypto.NOUNCE_SIZE);
         } else {

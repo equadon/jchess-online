@@ -3,7 +3,11 @@ package com.jchess.util.crypto;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.encoders.Base64;
 
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.security.*;
 import java.util.Arrays;
@@ -36,17 +40,17 @@ public class AsymmetricCrypto {
         return keyPair.getPublic();
     }
 
-    public String encrypt(String plainText, PublicKey key) throws Exception {
+    public String encrypt(String plainText, PublicKey key) throws UnsupportedEncodingException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, NoSuchPaddingException {
         byte[] cipherText = encrypt(plainText.getBytes("UTF-8"), key);
 
         return Base64.toBase64String(cipherText);
     }
 
-    public byte[] encrypt(byte[] plainText, PublicKey key) throws Exception {
+    public byte[] encrypt(byte[] plainText, PublicKey key) throws IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
         return encrypt(plainText, key, 0);
     }
 
-    public byte[] encrypt(byte[] plainText, PublicKey key, int offset) throws Exception {
+    public byte[] encrypt(byte[] plainText, PublicKey key, int offset) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
         byte[] bytes = Arrays.copyOfRange(plainText, offset, plainText.length);
 
         Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
@@ -67,14 +71,14 @@ public class AsymmetricCrypto {
         return encrypted;
     }
 
-    public String decrypt(String encodedCipherText) throws Exception {
+    public String decrypt(String encodedCipherText) throws IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException {
         byte[] cipherText = Base64.decode(encodedCipherText);
         byte[] plainText = decrypt(cipherText);
 
         return new String(plainText);
     }
 
-    public byte[] decrypt(byte[] cipherText) throws Exception {
+    public byte[] decrypt(byte[] cipherText) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
         Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
         cipher.init(Cipher.DECRYPT_MODE, keyPair.getPrivate());
 

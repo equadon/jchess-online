@@ -1,5 +1,6 @@
 package com.jchess.network;
 
+import com.jchess.Config;
 import com.jchess.network.packets.auth.AuthRequest;
 import com.jchess.network.packets.auth.HandshakeInit;
 import com.jchess.server.ServerClient;

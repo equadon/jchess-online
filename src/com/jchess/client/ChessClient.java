@@ -65,13 +65,8 @@ public class ChessClient extends ClientListener {
     }
 
     public void updateSymmetricKeys(Handshake packet) {
-        LOG.info("Key (before): " + Arrays.toString(crypto.getKey()));
-        LOG.info("Nounce (before): " + Arrays.toString(crypto.getNounce()));
-
-        crypto.setKeyNounce(packet.key, packet.nounce);
-
-        LOG.info("Key (after): " + Arrays.toString(crypto.getKey()));
-        LOG.info("Nounce (after): " + Arrays.toString(crypto.getNounce()));
+        if (Config.ENCRYPTPED_PACKETS)
+            crypto.setKeyNounce(packet.key, packet.nounce);
     }
 
     public static void main(String[] args) {
