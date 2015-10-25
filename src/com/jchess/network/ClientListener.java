@@ -74,15 +74,15 @@ public class ClientListener {
         } catch (CryptoException ce) {
             LOG.severe(ce.getMessage());
         } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
+            LOG.severe(e.getMessage());
         } catch (InvalidKeyException e) {
-            e.printStackTrace();
+            LOG.severe(e.getMessage());
         } catch (BadPaddingException e) {
-            e.printStackTrace();
+            LOG.severe(e.getMessage());
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            LOG.severe(e.getMessage());
         } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
+            LOG.severe(e.getMessage());
         }
     }
 
@@ -120,15 +120,15 @@ public class ClientListener {
         } catch (CryptoException ce) {
             LOG.severe(ce.getMessage());
         } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
+            LOG.severe(e.getMessage());
         } catch (InvalidKeyException e) {
-            e.printStackTrace();
+            LOG.severe(e.getMessage());
         } catch (BadPaddingException e) {
-            e.printStackTrace();
+            LOG.severe(e.getMessage());
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            LOG.severe(e.getMessage());
         } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
+            LOG.severe(e.getMessage());
         }
     }
 }
