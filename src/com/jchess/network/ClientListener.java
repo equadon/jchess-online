@@ -60,7 +60,7 @@ public class ClientListener {
         }
     }
 
-    public ReceivablePacket receive() throws IOException, JChessUnknownPacketException {
+    public void receive(PacketManager handler) throws IOException, JChessUnknownPacketException {
         int opId = input.readShort();
         OpCode opcode = OpCode.get(opId);
 
@@ -71,9 +71,8 @@ public class ClientListener {
         byte[] payload = new byte[length];
         input.read(payload, 0, length);
 
-        ReceivablePacket packet = new GamePacket(opcode, length, payload);
-        LOG.info("Received packet: " + Arrays.toString(packet.getBytes()) + " (" + packet.getOpcode() + ")");
+        LOG.info("Received packet: " + opcode + ", payload: " + Arrays.toString(payload));
 
-        return null;
+        handler.manage(opcode, length, payload);
     }
 }

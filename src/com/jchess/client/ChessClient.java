@@ -3,7 +3,7 @@ package com.jchess.client;
 import com.jchess.Config;
 import com.jchess.network.ClientListener;
 import com.jchess.network.SendablePacket;
-import com.jchess.network.packets.auth.RequestAuth;
+import com.jchess.network.packets.auth.AuthRequest;
 import com.jchess.util.crypto.Utility;
 
 import java.io.IOException;
@@ -21,7 +21,7 @@ public class ChessClient extends ClientListener {
     public void run() {
         while (isRunning()) {
             Utility.readUserInput("Press <ENTER> to login...");
-            SendablePacket packet = new RequestAuth("user", "pass");
+            SendablePacket packet = new AuthRequest("user", "pass");
             send(packet);
         }
     }
