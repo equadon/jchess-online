@@ -44,7 +44,7 @@ public class Pawn extends Piece {
     }
 
     private boolean canMoveDoubleForward(Chessboard board, Square src, Square dest) {
-        return dest.isValid() && hasMoved() && canMoveForward(board, dest);
+        return dest.isValid() && !hasMoved() && canMoveForward(board, dest);
     }
 
     private boolean canMoveDiagonally(Chessboard board, Square dest) {
