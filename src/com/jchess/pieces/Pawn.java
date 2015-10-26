@@ -4,7 +4,6 @@ import com.jchess.game.Color;
 import com.jchess.move.Move;
 import com.jchess.game.Piece;
 import com.jchess.game.PieceType;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class Pawn extends Piece {
     public Pawn(Color color) {
@@ -13,6 +12,6 @@ public class Pawn extends Piece {
 
     @Override
     public Move[] validMoves() {
-        throw new NotImplementedException();
+        return null;
     }
 }

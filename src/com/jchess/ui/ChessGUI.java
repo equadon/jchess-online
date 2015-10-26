@@ -9,6 +9,8 @@ import com.jchess.game.notation.TestMoveNotationParser;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.logging.Logger;
 
 public class ChessGUI extends JFrame {
@@ -33,6 +35,7 @@ public class ChessGUI extends JFrame {
         setSize(600, 600);
         setVisible(true);
 
+        // Action performed
         moveText.addActionListener(e -> {
             String text = moveText.getText().trim();
 
