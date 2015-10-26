@@ -2,6 +2,7 @@ package com.jchess.ui;
 
 import com.jchess.board.Chessboard;
 import com.jchess.board.Square;
+import com.jchess.game.Game;
 import com.jchess.game.Piece;
 import com.jchess.ui.drawers.FontPieceDrawer;
 import com.jchess.ui.drawers.PieceDrawer;
@@ -21,12 +22,12 @@ public class ChessboardPanel extends JPanel {
     private Font chessFont;
     private Font squareFont;
 
-    private Chessboard chessboard;
+    private Game game;
 
     private PieceDrawer pieceDrawer;
 
-    public ChessboardPanel(Chessboard chessboard) {
-        this.chessboard = chessboard;
+    public ChessboardPanel(Game game) {
+        this.game = game;
 
         squareFont = new Font(Font.SANS_SERIF, Font.PLAIN, 14);
     }
@@ -65,7 +66,7 @@ public class ChessboardPanel extends JPanel {
     }
 
     private void drawPieces(Graphics2D g) {
-        for (Map.Entry<Piece, Square> entry : chessboard.getPieces().entrySet())
+        for (Map.Entry<Piece, Square> entry : game.getPieces().entrySet())
             pieceDrawer.draw(g, entry.getKey(), entry.getValue());
     }
 

@@ -1,8 +1,11 @@
 package com.jchess.ui;
 
+import com.jchess.board.Square;
 import com.jchess.game.Game;
 import com.jchess.game.Player;
-import com.jchess.ui.drawers.FontPieceDrawer;
+import com.jchess.game.notation.AlgebraicMoveNotationParser;
+import com.jchess.game.notation.MoveNotationParser;
+import com.jchess.game.notation.TestMoveNotationParser;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,6 +16,10 @@ public class ChessGUI extends JFrame {
 
     private Game game;
 
+    private JPanel mainPanel;
+    private JPanel infoPanel;
+    private JLabel moveLabel;
+    private JTextField moveText;
     private JPanel chessPanel;
 
     public ChessGUI(Game game) throws HeadlessException {
@@ -21,14 +28,29 @@ public class ChessGUI extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setTitle("JChess Online");
 
-        add(chessPanel);
+        add(mainPanel);
 
         setSize(600, 600);
         setVisible(true);
+
+        moveText.addActionListener(e -> {
+            String text = moveText.getText().trim();
+
+            MoveNotationParser parser = new TestMoveNotationParser(game, text);
+
+            Square src = parser.getSrc();
+            Square dest = parser.getDest();
+
+            if (src == null || dest == null) {
+                JOptionPane.showMessageDialog(this, "Couldn't parse move: " + text);
+            } else {
+                JOptionPane.showMessageDialog(this, String.format("Moving (%d,%d) --> (%d,%d)...", src.row, src.col, dest.row, dest.col));
+            }
+        });
     }
 
     private void createUIComponents() {
-        chessPanel = new ChessboardPanel(game.getChessboard());
+        chessPanel = new ChessboardPanel(game);
     }
 
     public static void main(String[] args) {

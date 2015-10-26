@@ -1,11 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.jchess.ui.ChessGUI">
-  <grid id="27dc6" binding="chessPanel" custom-create="true" layout-manager="BorderLayout" hgap="0" vgap="0">
+  <grid id="27dc6" binding="mainPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
     <constraints>
       <xy x="274" y="364" width="500" height="400"/>
     </constraints>
     <properties/>
     <border type="none"/>
-    <children/>
+    <children>
+      <grid id="861bd" binding="infoPanel" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+        <constraints border-constraint="South"/>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="b92df" class="javax.swing.JLabel" binding="moveLabel">
+            <constraints/>
+            <properties>
+              <text value="Move:"/>
+            </properties>
+          </component>
+          <component id="b2bc7" class="javax.swing.JTextField" binding="moveText">
+            <constraints/>
+            <properties>
+              <columns value="5"/>
+              <text value=""/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <grid id="48b2c" binding="chessPanel" custom-create="true" layout-manager="BorderLayout" hgap="0" vgap="0">
+        <constraints border-constraint="Center"/>
+        <properties/>
+        <border type="none"/>
+        <children/>
+      </grid>
+    </children>
   </grid>
 </form>
