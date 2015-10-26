@@ -18,8 +18,8 @@ public class Move {
     }
 
     public void execute() {
-        board.move(src, dest);
-        board.capture(capturedPiece);
+        if (board.move(src, dest))
+            board.capture(capturedPiece);
     }
 
     public Square getSrc() {

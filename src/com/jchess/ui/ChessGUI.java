@@ -2,15 +2,14 @@ package com.jchess.ui;
 
 import com.jchess.board.Square;
 import com.jchess.game.Game;
-import com.jchess.move.Move;
 import com.jchess.game.Player;
 import com.jchess.game.notation.MoveNotationParser;
 import com.jchess.game.notation.TestMoveNotationParser;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.logging.Logger;
 
 public class ChessGUI extends JFrame {

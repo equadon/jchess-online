@@ -10,9 +10,14 @@ import com.jchess.util.crypto.Utility;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Map;
+import java.util.logging.Logger;
 
-public class ChessboardPanel extends JPanel {
+public class ChessboardPanel extends JPanel implements MouseListener {
+    private static final Logger LOG = Logger.getLogger(ChessboardPanel.class.getName());
+
     public static final int BORDER = 30; // pixels
 
     public static final Color TEXT_COLOR = new Color(60, 60, 60);
@@ -26,10 +31,14 @@ public class ChessboardPanel extends JPanel {
 
     private PieceDrawer pieceDrawer;
 
+    private Square srcClick;
+
     public ChessboardPanel(Game game) {
         this.game = game;
 
         squareFont = new Font(Font.SANS_SERIF, Font.PLAIN, 14);
+
+        addMouseListener(this);
     }
 
     public Rectangle getBoardBounds() {
@@ -39,11 +48,11 @@ public class ChessboardPanel extends JPanel {
     }
 
     public int getSquareWidth() {
-        return (int) (getBoardBounds().width / Chessboard.COLUMNS);
+        return getBoardBounds().width / Chessboard.COLUMNS;
     }
 
     public int getSquareHeight() {
-        return (int) (getBoardBounds().height / Chessboard.ROWS);
+        return getBoardBounds().height / Chessboard.ROWS;
     }
 
     @Override
@@ -63,6 +72,18 @@ public class ChessboardPanel extends JPanel {
         drawCellNumbers(g2d);
 
         drawPieces(g2d);
+    }
+
+    public int getRow(int y) {
+        int relY = y - BORDER;
+
+        return 8 - relY / getSquareHeight();
+    }
+
+    public int getColumn(int x) {
+        int relX = x - BORDER;
+
+        return 1 + relX / getSquareWidth();
     }
 
     private void drawPieces(Graphics2D g) {
@@ -128,5 +149,47 @@ public class ChessboardPanel extends JPanel {
             g.drawString(numbers[row], bounds.x - strWidth - 3, y);
             g.drawString(numbers[row], (int) bounds.getMaxX(), y);
         }
+    }
+
+    private boolean isInsideBoard(MouseEvent e) {
+        Rectangle bounds = getBoardBounds();
+
+        return (e.getX() >= bounds.x && e.getX() <= bounds.getMaxX()) &&
+                (e.getY() >= bounds.y && e.getY() <= bounds.getMaxY());
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {}
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        if (e.getButton() == 1 && isInsideBoard(e)) {
+            int row = getRow(e.getY());
+            int col = getColumn(e.getX());
+
+            srcClick = new Square(row, col);
+        }
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        if (e.getButton() == 1 && srcClick != null && isInsideBoard(e)) {
+            int row = getRow(e.getY());
+            int col = getColumn(e.getX());
+
+            Square dest = new Square(row, col);
+            game.tmpMove(srcClick, dest);
+            repaint();
+
+            srcClick = null;
+        }
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
     }
 }

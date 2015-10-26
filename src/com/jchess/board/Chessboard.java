@@ -45,8 +45,13 @@ public class Chessboard {
         return i % ROWS;
     }
 
-    public void move(Square src, Square dest) {
-        pieces.put(getPiece(src), dest);
+    public boolean move(Square src, Square dest) {
+        if (!src.equals(dest)) {
+            pieces.put(getPiece(src), dest);
+            return true;
+        }
+
+        return false;
     }
 
     public void capture(Piece piece) {
