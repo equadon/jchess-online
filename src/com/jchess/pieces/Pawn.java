@@ -21,8 +21,8 @@ public class Pawn extends Piece {
 
         Square forward = src.forward(color);
         Square doubleForward = forward.forward(color);
-        Square diagonalLeft = src.forwardDiagLeft(color);
-        Square diagonalRight = src.forwardDiagRight(color);
+        Square diagonalLeft = forward.left(color);
+        Square diagonalRight = forward.right(color);
 
         if (canMoveForward(board, forward))
             moves.add(new Move(board, src, forward));
@@ -40,17 +40,17 @@ public class Pawn extends Piece {
     }
 
     private boolean canMoveForward(Chessboard board, Square dest) {
-        return board.isSquareEmpty(dest);
+        return dest.isValid() && board.isSquareEmpty(dest);
     }
 
     private boolean canMoveDoubleForward(Chessboard board, Square src, Square dest) {
-        return isAtStartRow(src) && canMoveForward(board, dest);
+        return dest.isValid() && isAtStartRow(src) && canMoveForward(board, dest);
     }
 
     private boolean canMoveDiagonally(Chessboard board, Square dest) {
         Piece piece = board.getPiece(dest);
 
-        return (piece != null && piece.getColor() != color);
+        return dest.isValid() && (piece != null && piece.getColor() != color);
     }
 
     private boolean isAtStartRow(Square src) {

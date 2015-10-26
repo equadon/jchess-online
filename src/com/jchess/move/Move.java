@@ -25,6 +25,8 @@ public class Move {
     public void execute() {
         if (!src.equals(dest)) {
             Piece srcPiece = board.getPiece(src);
+            if (srcPiece == null)
+                return;
 
             List<Move> validMoves = srcPiece.validMoves(board, src);
 

@@ -11,48 +11,47 @@ public class Square {
         this.col = col;
     }
 
+    /**
+     * Return a cell with (-1,-1) if non was found so we can chain method calls.
+     */
     public Square forward(Color color) {
+        if (isNull())
+            return new Square(-1, -1);
+
         Square square = new Square(row + color.direction, col);
-        return (square.isValid()) ? square : null;
-    }
-
-    public Square forwardDiagRight(Color color) {
-        Square square = new Square(row + color.direction, col + color.direction);
-        return (square.isValid()) ? square : null;
-    }
-
-    public Square forwardDiagLeft(Color color) {
-        Square square = new Square(row + color.direction, col - color.direction);
-        return (square.isValid()) ? square : null;
+        return (square.isValid()) ? square : new Square(-1, -1);
     }
 
     public Square backward(Color color) {
+        if (isNull())
+            return new Square(-1, -1);
+
         Square square = new Square(row - color.direction, col);
-        return (square.isValid()) ? square : null;
-    }
-
-    public Square backwardDiagRight(Color color) {
-        Square square = new Square(row - color.direction, col + color.direction);
-        return (square.isValid()) ? square : null;
-    }
-
-    public Square backwardDiagLeft(Color color) {
-        Square square = new Square(row - color.direction, col - color.direction);
-        return (square.isValid()) ? square : null;
+        return (square.isValid()) ? square : new Square(-1, -1);
     }
 
     public Square right(Color color) {
+        if (isNull())
+            return new Square(-1, -1);
+
         Square square = new Square(row, col + color.direction);
-        return (square.isValid()) ? square : null;
+        return (square.isValid()) ? square : new Square(-1, -1);
     }
 
     public Square left(Color color) {
+        if (isNull())
+            return new Square(-1, -1);
+
         Square square = new Square(row, col - color.direction);
-        return (square.isValid()) ? square : null;
+        return (square.isValid()) ? square : new Square(-1, -1);
     }
 
     public boolean isValid() {
-        return (row > 0 && row <= Chessboard.ROWS) && (col > 0 && col <= Chessboard.COLUMNS);
+        return (!isNull()) && (row > 0 && row <= Chessboard.ROWS) && (col > 0 && col <= Chessboard.COLUMNS);
+    }
+
+    public boolean isNull() {
+        return (row == -1 && col == -1);
     }
 
     @Override
