@@ -1,6 +1,7 @@
 package com.jchess.game;
 
 import com.jchess.board.Chessboard;
+import com.jchess.board.Square;
 import com.jchess.board.initializers.BoardInitializer;
 import com.jchess.board.initializers.DefaultInitializer;
 
@@ -15,7 +16,7 @@ public class Game {
     private Map<Color, Player> players;
     private List<Move> moves;
 
-    private Color currentPlayer;
+    private Color currentColor;
 
     /**
      * Construct a new game with the default chessboard initializer.
@@ -35,12 +36,16 @@ public class Game {
         players.put(Color.White, player1);
         players.put(Color.Black, player2);
 
-        currentPlayer = Color.White;
+        currentColor = Color.White;
 
         initializer.init(chessboard);
     }
 
-    public Chessboard getChessboard() {
-        return chessboard;
+    public Map<Piece, Square> getPieces() {
+        return chessboard.getPieces();
+    }
+
+    public Color getCurrentColor() {
+        return currentColor;
     }
 }
