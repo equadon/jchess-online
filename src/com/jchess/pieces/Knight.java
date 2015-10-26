@@ -20,37 +20,23 @@ public class Knight extends Piece {
     public List<Move> validMoves(Chessboard board, Square src) {
         List<Move> moves = new ArrayList<>();
 
-        Square forwRight = src.forward(color).forward(color).right(color);
-        Square forwLeft = src.forward(color).forward(color).left(color);
+        Square[] destSquares = new Square[8];
 
-        Square backRight = src.backward(color).backward(color).right(color);
-        Square backLeft = src.backward(color).backward(color).left(color);
+        destSquares[0] = src.forward(color).forward(color).right(color);
+        destSquares[1] = src.forward(color).forward(color).left(color);
 
-        Square rightForw = src.right(color).right(color).forward(color);
-        Square rightBack = src.right(color).right(color).backward(color);
+        destSquares[2] = src.backward(color).backward(color).right(color);
+        destSquares[3] = src.backward(color).backward(color).left(color);
 
-        Square leftForw = src.left(color).left(color).forward(color);
-        Square leftBack = src.left(color).left(color).backward(color);
+        destSquares[4] = src.right(color).right(color).forward(color);
+        destSquares[5] = src.right(color).right(color).backward(color);
 
-        if (canMove(board, forwRight))
-            moves.add(new Move(board, src, forwRight));
-        if (forwLeft.isValid() && canMove(board, forwLeft))
-            moves.add(new Move(board, src, forwLeft));
+        destSquares[6] = src.left(color).left(color).forward(color);
+        destSquares[7] = src.left(color).left(color).backward(color);
 
-        if (canMove(board, backRight))
-            moves.add(new Move(board, src, backRight));
-        if (canMove(board, backLeft))
-            moves.add(new Move(board, src, backLeft));
-
-        if (canMove(board, rightForw))
-            moves.add(new Move(board, src, rightForw));
-        if (canMove(board, rightBack))
-            moves.add(new Move(board, src, rightBack));
-
-        if (canMove(board, leftForw))
-            moves.add(new Move(board, src, leftForw));
-        if (canMove(board, leftBack))
-            moves.add(new Move(board, src, leftBack));
+        for (Square dest : destSquares)
+            if (canMove(board, dest))
+                moves.add(new Move(board, src, dest));
 
         return moves;
     }
