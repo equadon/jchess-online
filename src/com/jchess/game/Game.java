@@ -4,6 +4,7 @@ import com.jchess.board.Chessboard;
 import com.jchess.board.Square;
 import com.jchess.board.initializers.BoardInitializer;
 import com.jchess.board.initializers.DefaultInitializer;
+import com.jchess.move.Move;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,5 +48,16 @@ public class Game {
 
     public Color getCurrentColor() {
         return currentColor;
+    }
+
+    public void execute(Move move) {
+        move.execute();
+    }
+
+    /**
+     * Temporary until proper move code is implemented?
+     */
+    public void tmpMove(Square src, Square dest) {
+        execute(new Move(chessboard, src, dest));
     }
 }

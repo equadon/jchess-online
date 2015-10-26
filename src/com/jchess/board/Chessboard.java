@@ -2,7 +2,9 @@ package com.jchess.board;
 
 import com.jchess.game.Piece;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Chessboard {
@@ -19,6 +21,14 @@ public class Chessboard {
         return pieces;
     }
 
+    public Piece getPiece(Square square) {
+        for (Map.Entry<Piece, Square> entry : pieces.entrySet())
+            if (entry.getValue().equals(square))
+                return entry.getKey();
+
+        return null;
+    }
+
     public void setPiece(Piece piece, Square square) {
         pieces.put(piece, square);
     }
@@ -33,5 +43,13 @@ public class Chessboard {
 
     public static int getColumn(int i) {
         return i % ROWS;
+    }
+
+    public void move(Square src, Square dest) {
+        pieces.put(getPiece(src), dest);
+    }
+
+    public void capture(Piece piece) {
+        pieces.remove(piece);
     }
 }

@@ -1,8 +1,6 @@
 package com.jchess.game;
 
-import com.jchess.game.Color;
-import com.jchess.game.Move;
-import com.jchess.game.PieceType;
+import com.jchess.move.Move;
 
 public abstract class Piece {
     private PieceType type;

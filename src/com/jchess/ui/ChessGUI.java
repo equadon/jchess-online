@@ -2,8 +2,8 @@ package com.jchess.ui;
 
 import com.jchess.board.Square;
 import com.jchess.game.Game;
+import com.jchess.move.Move;
 import com.jchess.game.Player;
-import com.jchess.game.notation.AlgebraicMoveNotationParser;
 import com.jchess.game.notation.MoveNotationParser;
 import com.jchess.game.notation.TestMoveNotationParser;
 
@@ -44,7 +44,9 @@ public class ChessGUI extends JFrame {
             if (src == null || dest == null) {
                 JOptionPane.showMessageDialog(this, "Couldn't parse move: " + text);
             } else {
-                JOptionPane.showMessageDialog(this, String.format("Moving (%d,%d) --> (%d,%d)...", src.row, src.col, dest.row, dest.col));
+                game.tmpMove(src, dest);
+                repaint();
+                moveText.setText("");
             }
         });
     }
