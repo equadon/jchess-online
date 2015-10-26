@@ -1,10 +1,14 @@
 package com.jchess.game;
 
+import com.jchess.board.Chessboard;
+import com.jchess.board.Square;
 import com.jchess.move.Move;
 
+import java.util.List;
+
 public abstract class Piece {
-    private PieceType type;
-    private Color color;
+    protected PieceType type;
+    protected Color color;
 
     public Piece(PieceType type, Color color) {
         this.type = type;
@@ -19,5 +23,5 @@ public abstract class Piece {
         return color;
     }
 
-    public abstract Move[] validMoves();
+    public abstract List<Move> validMoves(Chessboard board, Square current);
 }

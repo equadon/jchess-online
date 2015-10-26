@@ -57,4 +57,8 @@ public class Chessboard {
     public void capture(Piece piece) {
         pieces.remove(piece);
     }
+
+    public boolean isSquareEmpty(Square square) {
+        return getPiece(square) == null;
+    }
 }

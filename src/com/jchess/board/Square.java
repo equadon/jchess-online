@@ -13,25 +13,41 @@ public class Square {
 
     public Square forward(Color color) {
         Square square = new Square(row + color.direction, col);
+        return (square.isValid()) ? square : null;
+    }
 
+    public Square forwardDiagRight(Color color) {
+        Square square = new Square(row + color.direction, col + color.direction);
+        return (square.isValid()) ? square : null;
+    }
+
+    public Square forwardDiagLeft(Color color) {
+        Square square = new Square(row + color.direction, col - color.direction);
         return (square.isValid()) ? square : null;
     }
 
     public Square backward(Color color) {
         Square square = new Square(row - color.direction, col);
-
         return (square.isValid()) ? square : null;
     }
 
-    public Square left(Color color) {
-        Square square = new Square(row, col - color.direction);
+    public Square backwardDiagRight(Color color) {
+        Square square = new Square(row - color.direction, col + color.direction);
+        return (square.isValid()) ? square : null;
+    }
 
+    public Square backwardDiagLeft(Color color) {
+        Square square = new Square(row - color.direction, col - color.direction);
         return (square.isValid()) ? square : null;
     }
 
     public Square right(Color color) {
         Square square = new Square(row, col + color.direction);
+        return (square.isValid()) ? square : null;
+    }
 
+    public Square left(Color color) {
+        Square square = new Square(row, col - color.direction);
         return (square.isValid()) ? square : null;
     }
 
