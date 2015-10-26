@@ -1,37 +1,58 @@
 package com.jchess.ui.drawers;
 
-import com.jchess.game.Piece;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import com.jchess.board.Square;
+import com.jchess.game.*;
+import com.jchess.game.Color;
+import com.jchess.ui.ChessboardPanel;
+import com.jchess.util.crypto.Utility;
 
 import java.awt.*;
 
 public class FontPieceDrawer implements PieceDrawer {
+    private final ChessboardPanel chessPanel;
+
+    private Font font;
+
+    public FontPieceDrawer(ChessboardPanel chessPanel, Font font) {
+        this.chessPanel = chessPanel;
+        this.font = font;
+    }
+
     @Override
-    public void draw(Graphics2D g, Piece piece) {
-/*
-        White pawn         p        P
-        Black pawn         o        O
-        White knight       n        N
-        Black knight       m        M
-        White bishop       b        B
-        Black bishop       v        V
-        White rook         r        R
-        Black rook         t        T
-        White queen        q        Q
-        Black queen        w        W
-        White king         k        K
-        Black king         l        L
+    public void draw(Graphics2D g, Piece piece, Square square) {
+        Rectangle bounds = chessPanel.getBoardBounds();
+        g.setFont(font);
 
-        Rectangle bounds = getBoardBounds();
-        g.setFont(chessFont);
+        String letter = getLetter(piece);
 
-        String letter = "k";
+        int x = bounds.x + (square.col - 1) * chessPanel.getSquareWidth();
+        int y = bounds.y + (9 - square.row) * chessPanel.getSquareHeight();
 
-        int x = bounds.x + col * getSquareWidth();
-        int y = bounds.y + (row + 1) * getSquareHeight();
+        Utility.drawCenteredString(g, font, letter, chessPanel.getSquareWidth(), x, y);
+    }
 
-        g.drawString(letter, x, y);
-*/
-        throw new NotImplementedException();
+    private String getLetter(Piece piece) {
+        switch (piece.getType()) {
+            case PAWN:
+                return (piece.getColor() == Color.White) ? "p" : "o";
+
+            case KNIGHT:
+                return (piece.getColor() == Color.White) ? "n" : "m";
+
+            case BISHOP:
+                return (piece.getColor() == Color.White) ? "b" : "v";
+
+            case ROOK:
+                return (piece.getColor() == Color.White) ? "r" : "t";
+
+            case QUEEN:
+                return (piece.getColor() == Color.White) ? "q" : "w";
+
+            case KING:
+                return (piece.getColor() == Color.White) ? "k" : "l";
+
+            default:
+                return "";
+        }
     }
 }

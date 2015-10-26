@@ -13,21 +13,22 @@ public class ChessGUI extends JFrame {
 
     private Game game;
 
-    private JPanel chessBoard;
+    private JPanel chessPanel;
 
     public ChessGUI(Game game) throws HeadlessException {
+        this.game = game;
+
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setTitle("JChess Online");
 
-        add(chessBoard);
+        add(chessPanel);
 
         setSize(600, 600);
         setVisible(true);
-
-        this.game = game;
     }
+
     private void createUIComponents() {
-        chessBoard = new ChessBoardPanel(game.getBoard(), new FontPieceDrawer());
+        chessPanel = new ChessboardPanel(game.getChessboard());
     }
 
     public static void main(String[] args) {

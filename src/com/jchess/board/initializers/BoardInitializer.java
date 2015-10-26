@@ -1,7 +1,7 @@
 package com.jchess.board.initializers;
 
-import com.jchess.board.Board;
+import com.jchess.board.Chessboard;
 
 public interface BoardInitializer {
-    Board init();
+    void init(Chessboard chessboard);
 }

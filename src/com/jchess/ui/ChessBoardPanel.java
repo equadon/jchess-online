@@ -1,29 +1,34 @@
 package com.jchess.ui;
 
-import com.jchess.board.Board;
+import com.jchess.board.Chessboard;
+import com.jchess.board.Square;
 import com.jchess.game.Piece;
+import com.jchess.ui.drawers.FontPieceDrawer;
 import com.jchess.ui.drawers.PieceDrawer;
+import com.jchess.util.crypto.Utility;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Map;
 
-public class ChessBoardPanel extends JPanel {
+public class ChessboardPanel extends JPanel {
     public static final int BORDER = 30; // pixels
 
     public static final Color TEXT_COLOR = new Color(60, 60, 60);
     public static final Color BG_COLOR = new Color(231, 175, 111);
     public static final Color SQUARE_COLOR = new Color(137, 89, 51);
 
-    private static final Font chessFont = new Font("Chess Cases", Font.PLAIN, 64);
-    private static final Font squareFont = new Font(Font.SANS_SERIF, Font.PLAIN, 14);
+    private Font chessFont;
+    private Font squareFont;
 
-    private Board board;
+    private Chessboard chessboard;
 
     private PieceDrawer pieceDrawer;
 
-    public ChessBoardPanel(Board board, PieceDrawer pieceDrawer) {
-        this.board = board;
-        this.pieceDrawer = pieceDrawer;
+    public ChessboardPanel(Chessboard chessboard) {
+        this.chessboard = chessboard;
+
+        squareFont = new Font(Font.SANS_SERIF, Font.PLAIN, 14);
     }
 
     public Rectangle getBoardBounds() {
@@ -33,11 +38,11 @@ public class ChessBoardPanel extends JPanel {
     }
 
     public int getSquareWidth() {
-        return (int) (getBoardBounds().width / Board.COLUMNS);
+        return (int) (getBoardBounds().width / Chessboard.COLUMNS);
     }
 
     public int getSquareHeight() {
-        return (int) (getBoardBounds().height / Board.ROWS);
+        return (int) (getBoardBounds().height / Chessboard.ROWS);
     }
 
     @Override
@@ -47,7 +52,10 @@ public class ChessBoardPanel extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        // Draw board
+        chessFont = new Font("Chess Cases", Font.PLAIN, (int) (0.9 * getSquareWidth()));
+        pieceDrawer = new FontPieceDrawer(this, chessFont);
+
+        // Draw chessboard
         drawBoard(g2d);
 
         // Draw letters and numbers
@@ -57,10 +65,8 @@ public class ChessBoardPanel extends JPanel {
     }
 
     private void drawPieces(Graphics2D g) {
-    }
-
-    private void drawPiece(Graphics2D g, Piece piece) {
-        pieceDrawer.draw(g, piece);
+        for (Map.Entry<Piece, Square> entry : chessboard.getPieces().entrySet())
+            pieceDrawer.draw(g, entry.getKey(), entry.getValue());
     }
 
     private void drawBoard(Graphics2D g) {
@@ -70,19 +76,19 @@ public class ChessBoardPanel extends JPanel {
 
         // Background color
         g.setColor(BG_COLOR);
-        g.fillRect(bounds.x, bounds.y, width * Board.COLUMNS, height * Board.ROWS);
+        g.fillRect(bounds.x, bounds.y, width * Chessboard.COLUMNS, height * Chessboard.ROWS);
 
         // Squares
         g.setColor(SQUARE_COLOR);
-        for (int row = 0; row < Board.ROWS; row++) {
+        for (int row = 0; row < Chessboard.ROWS; row++) {
             int col = (row % 2 == 0) ? 1 : 0;
 
-            for (; col < Board.COLUMNS; col += 2)
+            for (; col < Chessboard.COLUMNS; col += 2)
                 g.fillRect(bounds.x + (col * width), bounds.y + (row * height), width, height);
         }
 
         // Border
-        g.drawRect(bounds.x, bounds.y, width * Board.COLUMNS, height * Board.ROWS);
+        g.drawRect(bounds.x, bounds.y, width * Chessboard.COLUMNS, height * Chessboard.ROWS);
     }
 
     private void drawCellNumbers(Graphics2D g) {
@@ -101,16 +107,20 @@ public class ChessBoardPanel extends JPanel {
         FontMetrics metrics = g.getFontMetrics(squareFont);
 
         // Letters (rows)
-        for (int col = 0; col < Board.COLUMNS; col++) {
+        for (int col = 0; col < Chessboard.COLUMNS; col++) {
             int strWidth = metrics.stringWidth(letters[col]);
-            int x = bounds.x + col * width + (int) (width / 2.0) - (int) (strWidth / 2.0);
 
-            g.drawString(letters[col], x, bounds.y - (int) (metrics.getHeight() / 2.0) + 5);
-            g.drawString(letters[col], x, (int) bounds.getMaxY() + (int) (metrics.getHeight() / 2.0));
+            int x = bounds.x + col * width;
+
+            int topY = bounds.y - (int) (metrics.getHeight() / 2.0) + 5;
+            int bottomY = (int) bounds.getMaxY() + (int) (metrics.getHeight() / 2.0);
+
+            Utility.drawCenteredString(g, squareFont, letters[col], getSquareWidth(), x, topY);
+            Utility.drawCenteredString(g, squareFont, letters[col], getSquareWidth(), x, bottomY);
         }
 
         // Numbers (columns)
-        for (int row = 0; row < Board.ROWS; row++) {
+        for (int row = 0; row < Chessboard.ROWS; row++) {
             int strWidth = metrics.stringWidth(numbers[row]);
             int y = bounds.y + row * height + (int) (getSquareHeight() / 2.0) + (int) (metrics.getHeight() / 3.0);
 
