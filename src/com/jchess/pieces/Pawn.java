@@ -44,19 +44,12 @@ public class Pawn extends Piece {
     }
 
     private boolean canMoveDoubleForward(Chessboard board, Square src, Square dest) {
-        return dest.isValid() && isAtStartRow(src) && canMoveForward(board, dest);
+        return dest.isValid() && hasMoved() && canMoveForward(board, dest);
     }
 
     private boolean canMoveDiagonally(Chessboard board, Square dest) {
         Piece piece = board.getPiece(dest);
 
         return dest.isValid() && (piece != null && piece.getColor() != color);
-    }
-
-    private boolean isAtStartRow(Square src) {
-        if (color == Color.WHITE)
-            return src.row == 2;
-        else
-            return src.row == 7;
     }
 }

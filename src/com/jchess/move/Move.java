@@ -32,10 +32,7 @@ public class Move {
 
             if (validMoves.contains(this) && board.move(src, dest)) {
                 board.capture(capturedPiece);
-                String capturedText = "";
-                if (capturedPiece != null)
-                    capturedText = " and captured a " + capturedPiece.getType();
-                LOG.info("Move: (" + src.row + "," + src.col + ") -> (" + dest.row + "," + dest.col + ")" + capturedText);
+                srcPiece.move();
             }
         }
     }

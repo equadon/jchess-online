@@ -10,9 +10,12 @@ public abstract class Piece {
     protected PieceType type;
     protected Color color;
 
+    protected boolean moved;
+
     public Piece(PieceType type, Color color) {
         this.type = type;
         this.color = color;
+        this.moved = false;
     }
 
     public PieceType getType() {
@@ -21,6 +24,14 @@ public abstract class Piece {
 
     public Color getColor() {
         return color;
+    }
+
+    public boolean hasMoved() {
+        return moved;
+    }
+
+    public void move() {
+        moved = true;
     }
 
     public abstract List<Move> validMoves(Chessboard board, Square current);
