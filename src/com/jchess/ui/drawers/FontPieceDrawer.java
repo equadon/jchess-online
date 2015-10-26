@@ -34,22 +34,22 @@ public class FontPieceDrawer implements PieceDrawer {
     private String getLetter(Piece piece) {
         switch (piece.getType()) {
             case PAWN:
-                return (piece.getColor() == Color.White) ? "p" : "o";
+                return (piece.getColor() == Color.WHITE) ? "p" : "o";
 
             case KNIGHT:
-                return (piece.getColor() == Color.White) ? "n" : "m";
+                return (piece.getColor() == Color.WHITE) ? "n" : "m";
 
             case BISHOP:
-                return (piece.getColor() == Color.White) ? "b" : "v";
+                return (piece.getColor() == Color.WHITE) ? "b" : "v";
 
             case ROOK:
-                return (piece.getColor() == Color.White) ? "r" : "t";
+                return (piece.getColor() == Color.WHITE) ? "r" : "t";
 
             case QUEEN:
-                return (piece.getColor() == Color.White) ? "q" : "w";
+                return (piece.getColor() == Color.WHITE) ? "q" : "w";
 
             case KING:
-                return (piece.getColor() == Color.White) ? "k" : "l";
+                return (piece.getColor() == Color.WHITE) ? "k" : "l";
 
             default:
                 return "";

@@ -34,10 +34,10 @@ public class Game {
         moves = new ArrayList<>();
 
         players = new HashMap<>();
-        players.put(Color.White, player1);
-        players.put(Color.Black, player2);
+        players.put(Color.WHITE, player1);
+        players.put(Color.BLACK, player2);
 
-        currentColor = Color.White;
+        currentColor = Color.WHITE;
 
         initializer.init(chessboard);
     }

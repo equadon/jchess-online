@@ -8,8 +8,8 @@ import com.jchess.pieces.*;
 public class DefaultInitializer implements BoardInitializer {
     @Override
     public void init(Chessboard chessboard) {
-        Color white = Color.White;
-        Color black = Color.Black;
+        Color white = Color.WHITE;
+        Color black = Color.BLACK;
 
         for (int col = 1; col <= Chessboard.COLUMNS; col++) {
             // Pawns
