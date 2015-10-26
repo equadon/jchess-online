@@ -20,19 +20,19 @@ public class Knight extends Piece {
     public List<Move> validMoves(Chessboard board, Square src) {
         List<Move> moves = new ArrayList<>();
 
-        Square[] destSquares = new Square[8];
+        Square[] destSquares = {
+                src.forward(color).forward(color).right(color),
+                src.forward(color).forward(color).left(color),
 
-        destSquares[0] = src.forward(color).forward(color).right(color);
-        destSquares[1] = src.forward(color).forward(color).left(color);
+                src.backward(color).backward(color).right(color),
+                src.backward(color).backward(color).left(color),
 
-        destSquares[2] = src.backward(color).backward(color).right(color);
-        destSquares[3] = src.backward(color).backward(color).left(color);
+                src.right(color).right(color).forward(color),
+                src.right(color).right(color).backward(color),
 
-        destSquares[4] = src.right(color).right(color).forward(color);
-        destSquares[5] = src.right(color).right(color).backward(color);
-
-        destSquares[6] = src.left(color).left(color).forward(color);
-        destSquares[7] = src.left(color).left(color).backward(color);
+                src.left(color).left(color).forward(color),
+                src.left(color).left(color).backward(color)
+        };
 
         for (Square dest : destSquares)
             if (canMove(board, dest))
