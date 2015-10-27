@@ -53,7 +53,7 @@ public class Rook extends Piece {
                 break;
         }
 
-        // Left
+        // Right
         captureMove = false;
         dest = src.right(color);
         while (canMove(board, dest)) {
