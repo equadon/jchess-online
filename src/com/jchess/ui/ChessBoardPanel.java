@@ -38,14 +38,18 @@ public class ChessboardPanel extends JPanel implements MouseListener {
 
     private Square srcClick;
 
-    public ChessboardPanel(Game game) {
-        this.game = game;
-
+    public ChessboardPanel() {
         piecePanels = new HashMap<>();
 
         squareFont = new Font(Font.SANS_SERIF, Font.PLAIN, 14);
 
+        setSize(600, 600);
+
         addMouseListener(this);
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
     }
 
     public Rectangle getBoardBounds() {
@@ -113,13 +117,16 @@ public class ChessboardPanel extends JPanel implements MouseListener {
             int width = getSquareWidth();
             int height = getSquareHeight();
 
+            int dotWidth = (int) (0.25 * getSquareWidth());
+            int dotHeight = (int) (0.25 * getSquareWidth());
+
             for (Move move : validMoves) {
                 Square dest = move.getDest();
 
                 int row = (8 - dest.row);
                 int col = dest.col - 1;
 
-                g.fillOval(bounds.x + col * width + width/2 - 10, bounds.y + row * height + height/2 - 10, 20, 20);
+                g.fillOval(bounds.x + col * width + width/2 - dotWidth/2, bounds.y + row * height + height/2 - dotHeight/2, dotWidth, dotHeight);
             }
         }
     }
@@ -166,7 +173,7 @@ public class ChessboardPanel extends JPanel implements MouseListener {
             int x = bounds.x + col * width;
 
             int topY = bounds.y - (int) (metrics.getHeight() / 2.0) + 5;
-            int bottomY = (int) bounds.getMaxY() + (int) (metrics.getHeight() / 2.0);
+            int bottomY = (int) bounds.getMaxY() + (int) (metrics.getHeight() / 2.0) + 5;
 
             Utility.drawCenteredString(g, squareFont, letters[col], getSquareWidth(), x, topY);
             Utility.drawCenteredString(g, squareFont, letters[col], getSquareWidth(), x, bottomY);

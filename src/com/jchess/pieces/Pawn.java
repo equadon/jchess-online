@@ -27,7 +27,7 @@ public class Pawn extends Piece {
         if (canMoveForward(board, forward))
             moves.add(new Move(board, src, forward));
 
-        if (canMoveDoubleForward(board, src, doubleForward))
+        if (board.isSquareEmpty(forward) && canMoveDoubleForward(board, src, doubleForward))
             moves.add(new Move(board, src, doubleForward));
 
         if (canMoveDiagonally(board, diagonalLeft))

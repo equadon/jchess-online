@@ -23,15 +23,17 @@ public class ChessGUI extends JFrame {
     private JTextField moveText;
     private JPanel chessPanel;
 
-    public ChessGUI(Game game) throws HeadlessException {
-        this.game = game;
+    private JMenuBar menuBar;
 
+    public ChessGUI() throws HeadlessException {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setTitle("JChess Online");
 
         add(mainPanel);
 
-        setSize(600, 600);
+        setJMenuBar(menuBar);
+
+        setSize(600, 650);
         setVisible(true);
 
         // Action performed
@@ -54,11 +56,32 @@ public class ChessGUI extends JFrame {
     }
 
     private void createUIComponents() {
-        chessPanel = new ChessboardPanel(game);
+        chessPanel = new ChessboardPanel();
+        JMenu fileMenu = new JMenu("File");
+
+        JMenuItem newGameMenuItem = new JMenuItem("New game");
+        JMenuItem exitMenuItem = new JMenuItem("Exit");
+
+        fileMenu.add(newGameMenuItem);
+        fileMenu.add(exitMenuItem);
+
+        menuBar = new JMenuBar();
+        menuBar.add(fileMenu);
+
+        newGameMenuItem.addActionListener(e -> newGame());
+
+        exitMenuItem.addActionListener(e -> dispose());
+
+        newGame();
+    }
+
+    private void newGame() {
+        game = new Game(new Player(0, "Player 1"), new Player(1, "Player 2"));
+        ((ChessboardPanel) chessPanel).setGame(game);
+        repaint();
     }
 
     public static void main(String[] args) {
-        Game game = new Game(new Player(0, "Player 1"), new Player(1, "Player 2"));
-        new ChessGUI(game);
+        new ChessGUI();
     }
 }
