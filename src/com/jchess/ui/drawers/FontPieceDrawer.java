@@ -21,12 +21,18 @@ public class FontPieceDrawer implements PieceDrawer {
     @Override
     public void draw(Graphics2D g, Piece piece, Square square) {
         Rectangle bounds = chessPanel.getBoardBounds();
-        g.setFont(font);
-
-        String letter = getLetter(piece);
 
         int x = bounds.x + (square.col - 1) * chessPanel.getSquareWidth();
         int y = bounds.y + (9 - square.row) * chessPanel.getSquareHeight();
+
+        draw(g, piece, x, y);
+    }
+
+    @Override
+    public void draw(Graphics2D g, Piece piece, int x, int y) {
+        g.setFont(font);
+
+        String letter = getLetter(piece);
 
         Utility.drawCenteredString(g, font, letter, chessPanel.getSquareWidth(), x, y);
     }

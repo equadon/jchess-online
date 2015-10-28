@@ -12,6 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -24,6 +25,8 @@ public class ChessboardPanel extends JPanel implements MouseListener {
     public static final Color BG_COLOR = new Color(231, 175, 111);
     public static final Color SQUARE_COLOR = new Color(137, 89, 51);
 
+    private Map<Square, PiecePanel> piecePanels;
+
     private Font chessFont;
     private Font squareFont;
 
@@ -35,6 +38,8 @@ public class ChessboardPanel extends JPanel implements MouseListener {
 
     public ChessboardPanel(Game game) {
         this.game = game;
+
+        piecePanels = new HashMap<>();
 
         squareFont = new Font(Font.SANS_SERIF, Font.PLAIN, 14);
 
@@ -87,8 +92,12 @@ public class ChessboardPanel extends JPanel implements MouseListener {
     }
 
     private void drawPieces(Graphics2D g) {
-        for (Map.Entry<Piece, Square> entry : game.getPieces().entrySet())
-            pieceDrawer.draw(g, entry.getKey(), entry.getValue());
+        for (Map.Entry<Piece, Square> entry : game.getPieces().entrySet()) {
+            Piece piece = entry.getKey();
+            Square square = entry.getValue();
+
+            piecePanels.put(square, new PiecePanel(this, g, pieceDrawer, piece, square));
+        }
     }
 
     private void drawBoard(Graphics2D g) {
@@ -130,8 +139,6 @@ public class ChessboardPanel extends JPanel implements MouseListener {
 
         // Letters (rows)
         for (int col = 0; col < Chessboard.COLUMNS; col++) {
-            int strWidth = metrics.stringWidth(letters[col]);
-
             int x = bounds.x + col * width;
 
             int topY = bounds.y - (int) (metrics.getHeight() / 2.0) + 5;

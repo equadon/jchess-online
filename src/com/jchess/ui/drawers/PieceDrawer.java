@@ -7,4 +7,5 @@ import java.awt.*;
 
 public interface PieceDrawer {
     void draw(Graphics2D g, Piece piece, Square square);
+    void draw(Graphics2D g, Piece piece, int x, int y);
 }
