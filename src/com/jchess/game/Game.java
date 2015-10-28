@@ -3,7 +3,7 @@ package com.jchess.game;
 import com.jchess.board.Chessboard;
 import com.jchess.board.Square;
 import com.jchess.board.initializers.BoardInitializer;
-import com.jchess.board.initializers.DefaultInitializer;
+import com.jchess.board.initializers.NewBoardInitializer;
 import com.jchess.move.Move;
 
 import java.util.ArrayList;
@@ -20,10 +20,10 @@ public class Game {
     private Color currentColor;
 
     /**
-     * Construct a new game with the default chessboard initializer.
+     * Construct a new game with the new game initializer.
      */
     public Game(Player player1, Player player2) {
-        this(player1, player2, new DefaultInitializer());
+        this(player1, player2, new NewBoardInitializer());
     }
 
     /**
@@ -44,6 +44,22 @@ public class Game {
 
     public Map<Piece, Square> getPieces() {
         return chessboard.getPieces();
+    }
+
+    public Piece getPiece(Square square) {
+        return chessboard.getPiece(square);
+    }
+
+    public Move[] getValidMoves(Square square) {
+        Piece piece = chessboard.getPiece(square);
+
+        if (piece != null) {
+            List<Move> moves = piece.validMoves(chessboard, square);
+            if (moves.size() > 0)
+                return moves.toArray(new Move[moves.size()]);
+        }
+
+        return null;
     }
 
     public Color getCurrentColor() {

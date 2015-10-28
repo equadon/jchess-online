@@ -4,6 +4,7 @@ import com.jchess.board.Chessboard;
 import com.jchess.board.Square;
 import com.jchess.game.Game;
 import com.jchess.game.Piece;
+import com.jchess.move.Move;
 import com.jchess.ui.drawers.FontPieceDrawer;
 import com.jchess.ui.drawers.PieceDrawer;
 import com.jchess.util.crypto.Utility;
@@ -26,6 +27,7 @@ public class ChessboardPanel extends JPanel implements MouseListener {
     public static final Color SQUARE_COLOR = new Color(137, 89, 51);
 
     private Map<Square, PiecePanel> piecePanels;
+    private Move[] validMoves;
 
     private Font chessFont;
     private Font squareFont;
@@ -77,6 +79,8 @@ public class ChessboardPanel extends JPanel implements MouseListener {
         drawCellNumbers(g2d);
 
         drawPieces(g2d);
+
+        drawValidMoves(g2d);
     }
 
     public int getRow(int y) {
@@ -92,11 +96,31 @@ public class ChessboardPanel extends JPanel implements MouseListener {
     }
 
     private void drawPieces(Graphics2D g) {
+        g.setColor(TEXT_COLOR);
         for (Map.Entry<Piece, Square> entry : game.getPieces().entrySet()) {
             Piece piece = entry.getKey();
             Square square = entry.getValue();
 
             piecePanels.put(square, new PiecePanel(this, g, pieceDrawer, piece, square));
+        }
+    }
+
+    private void drawValidMoves(Graphics2D g) {
+        if (validMoves != null) {
+            g.setColor(new Color(40, 171, 227));
+
+            Rectangle bounds = getBoardBounds();
+            int width = getSquareWidth();
+            int height = getSquareHeight();
+
+            for (Move move : validMoves) {
+                Square dest = move.getDest();
+
+                int row = (8 - dest.row);
+                int col = dest.col - 1;
+
+                g.fillOval(bounds.x + col * width + width/2 - 10, bounds.y + row * height + height/2 - 10, 20, 20);
+            }
         }
     }
 
@@ -175,11 +199,16 @@ public class ChessboardPanel extends JPanel implements MouseListener {
             int col = getColumn(e.getX());
 
             srcClick = new Square(row, col);
+
+            validMoves = game.getValidMoves(srcClick);
+            repaint();
         }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        validMoves = null;
+
         if (e.getButton() == 1 && srcClick != null && isInsideBoard(e)) {
             int row = getRow(e.getY());
             int col = getColumn(e.getX());
